@@ -2,6 +2,15 @@ const express = require('express')
 const app = express()
 const PORT = 8000
 const cors = require('cors')
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://zekothedev:LPMeqrkZZ8o4hRUI@cluster0.xtwdqmh.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+client.connect(err => {
+  const collection = client.db("test").collection("devices");
+  // perform actions on the collection object
+  client.close();
+});
+
 
 app.use(cors())
 
@@ -78,6 +87,13 @@ const capitalCities = {
       'Country': 'Italy',
       'Area': '1,285 km²'
     },
+
+    'abuja': {
+      'Mayor': 'Malam Muhammad Bello',
+      'Country': 'Nigeria',
+      'Area': '1,476 km²'
+    },
+
 
     'unknown': {
       'Mayor': 'Unknown',
