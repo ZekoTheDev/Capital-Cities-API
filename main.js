@@ -1,15 +1,20 @@
 const express = require('express')
 const app = express()
-const PORT = 8000
+const PORT = 5000
 const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://zekothedev:LPMeqrkZZ8o4hRUI@cluster0.xtwdqmh.mongodb.net/?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-client.connect(err => {
-  const collection = client.db("test").collection("devices");
-  // perform actions on the collection object
-  client.close();
-});
+const MongoClient = require('mongodb').MongoClient
+require('dotenv').config()
+
+
+let db,
+    dbConnectionStr = process.env.DB_STRING,
+    dbName = 'capitalCitiesDB'
+
+MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
+    .then(client => {
+        console.log(`Connected to ${dbName} Database`)
+        db = client.db(dbName)
+    })
 
 
 app.use(cors())
@@ -104,6 +109,10 @@ const capitalCities = {
 
 app.get('/', (request, response) => {
   response.sendFile(__dirname + '/index.html')
+  
+  .then(data => {
+    console.log(db.collection('capitalCities').find().toArray())
+  })
 })
 
 app.get('/api/:capital', (request, response) => {
